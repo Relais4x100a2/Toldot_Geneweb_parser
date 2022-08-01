@@ -101,10 +101,10 @@ def individu_parse():
                 # if lines_wit is True:
                 # print(i)
 
-    # print(list_ind)
+    #print(list_ind)
     # print(list_evt_ind)
     # print(list_evt_ind_note)
-    print(list_evt_ind_source)
+    #print(list_evt_ind_source)
 
 
 if __name__ == '__main__':

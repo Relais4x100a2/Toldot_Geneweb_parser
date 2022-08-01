@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}">
+    <title>Geneweb parser</title>
+</head>
+<body>
+   <h1>Le parser de fichier geneweb - un outil TOLDOT pour la prosoprographie</h1>
+<p>Ne perdez plus de temps à recopier les arbres geneanet.</p>
+<h2>Modèle de données proposées</h2>
+   <ul>
+   <li>Individu</li>
+   <li>Evenement</li>
+   <li>Organisation (famille organisation)</li>
+       </ul>
+<h2>Que deviennent mes données ?</h2>
+   <p>Effacées.
+   Nous proposons la possibilité de sauvegarder dans une base et de faire du matching</p>
+   <h2>Chargez votre fichier geneweb</h2>
+    <form method="POST" action="" enctype="multipart/form-data">
+      <p><input type="file" name="file"></p>
+      <p><input type="submit" value="Upload"></p>
+    </form>
+<h2>Toldot</h2>
+But - pas encore de site web.
+Objet de l'association.
+Pour nous aider.
+<h2>Evolution à venir</h2>
+</body>
+</html>
