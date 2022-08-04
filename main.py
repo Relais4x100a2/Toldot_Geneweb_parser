@@ -89,19 +89,21 @@ def parse():
             if line[1]:
                 if not re.search("#", line[1]):
                     if re.search("\~", line[1]):
-                        dict_evt["date"] = {"type": "vers", "value": line[1].replace("~", "")}
+                        dict_evt["date"] = {"type": "vers", "value": [line[1].replace("~", "")]}
                     elif re.search("\?", line[1]):
-                        dict_evt["date"] = {"type": "peut-être", "value": line[1].replace("?", "")}
+                        dict_evt["date"] = {"type": "peut-être", "value": [line[1].replace("?", "")]}
                     elif re.search("\<", line[1]):
-                        dict_evt["date"] = {"type" : "avant", "value": line[1].replace("<", "")}
+                        dict_evt["date"] = {"type" : "avant", "value": [line[1].replace("<", "")]}
                     elif re.search("\>", line[1]):
-                        dict_evt["date"] = {"type":"après", "value": line[1].replace(">", "")}
+                        dict_evt["date"] = {"type":"après", "value": [line[1].replace(">", "")]}
                     elif re.search("\|", line[1]):
-                        dict_evt["date"] = {"type":"ou", "value": line[1]}
+                        date_ou = line[1].split("|")
+                        dict_evt["date"] = {"type":"ou", "value": [date_ou[0],date_ou[1]]}
                     elif re.search("\.\.", line[1]):
-                        dict_evt["date"] = {"type":"entre", "value": line[1]}
+                        date_entre=line[1].split("..")
+                        dict_evt["date"] = {"type":"entre", "value": [date_entre[0],date_entre[1]]}
                     else:
-                        dict_evt["date"] = {"type":"exact", "value": line[1]}
+                        dict_evt["date"] = {"type":"exact", "value": [line[1]]}
                 else:
                     dict_evt["date"] = None
             else:
