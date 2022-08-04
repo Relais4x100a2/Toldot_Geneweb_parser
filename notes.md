@@ -1,3 +1,6 @@
+#### CLI
+Offrir la possibilité de modifier le code des regex et de l'adapter
+
 #### Pour améliorer le code, regarder
 https://github.com/MaximeChallon/AdresseParser/blob/master/AdresseParser/AdresseParser.py
 
@@ -21,6 +24,15 @@ https://www.mongodb.com/blog/post/getting-started-with-python-and-mongod
 * + événemenpour plus tardts + organisation (on calculera un score) + notice d'autorité.
 
 * Proposer enregistrement fichier sur serveur (filtre:personne décédée avant 1922) et montrer correspondance.
+
+
+
+* Vers	@@ ~ @@ ~10/5/1990
+* Peut-être	 @@ ? @@ ?10/5/1990
+* Avant @@	< @@ <10/5/1990
+* Après @@	> @@ >10/5/1990
+* Ou @@ | @@ 10/5/1990|1991
+* Entre	@@ .. @@ 10/5/1990..1991
 
 #### Bouts de code
 

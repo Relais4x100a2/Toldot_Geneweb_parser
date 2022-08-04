@@ -1,6 +1,8 @@
 import re
 import uuid
-
+import simplejson as json
+import pandas as pd
+import os
 
 def parse():
     """
@@ -78,16 +80,48 @@ def parse():
             line = evt.split()
             dict_evt["id_evt"] = uuid.uuid4().hex
             # Type d'événement
-            dict_evt["type"] = line[0]
+            type_evt = line[0].replace("_", " ")
+            ####prevoir replace
+            dict_evt["type"] = type_evt
+
             # Date d'événement
+            #### RAJOUTER VERIFICATION PRESENCE DATE
             if line[1]:
-                dict_evt["date"] = line[1]
+                if not re.search("#", line[1]):
+                    if re.search("\~", line[1]):
+                        dict_evt["date"] = {"type": "vers", "value": line[1].replace("~", "")}
+                    elif re.search("\?", line[1]):
+                        dict_evt["date"] = {"type": "peut-être", "value": line[1].replace("?", "")}
+                    elif re.search("\<", line[1]):
+                        dict_evt["date"] = {"type" : "avant", "value": line[1].replace("<", "")}
+                    elif re.search("\>", line[1]):
+                        dict_evt["date"] = {"type":"après", "value": line[1].replace(">", "")}
+                    elif re.search("\|", line[1]):
+                        dict_evt["date"] = {"type":"ou", "value": line[1]}
+                    elif re.search("\.\.", line[1]):
+                        dict_evt["date"] = {"type":"entre", "value": line[1]}
+                    else:
+                        dict_evt["date"] = {"type":"exact", "value": line[1]}
+                else:
+                    dict_evt["date"] = None
             else:
                 dict_evt["date"] = None
+            print( dict_evt["date"])
+
+
             # Lieu de l'événment
             try:
                 if line[2] == '#p':
-                    dict_evt["place"] = line[3]
+                    adresse = line[3].split("_-_")
+                    if len(adresse) == 1:
+                        ville_cp_d_r_p=adresse[0].replace("_", " ")
+                        dict_evt["place"] = {"ville_cp_d_r_p": ville_cp_d_r_p, "complement": None}
+                    else:
+                        ville_cp_d_r_p = adresse[1].replace("_", " ")
+                        complement = adresse[0].replace("_", " ")
+                        complement = complement.replace(" [", "")
+                        complement = complement.replace("]", "")
+                        dict_evt["place"] = {"ville_cp_d_r_p": ville_cp_d_r_p, "complement": complement}
             except IndexError:
                 pass
 
@@ -158,7 +192,33 @@ def parse():
     # on assemble les listes individus, familles (=organisation)
 
     # print(list_ind)
-    print(list_evt_ind)
+    #print(list_evt_ind)
+
+    # normalisation du JSON
+    json_evt_ind = json.dumps(list_evt_ind, ignore_nan=True, ensure_ascii=False)
+
+    # export du fichier JSON
+    data_export = os.path.join(os.getcwd(), "data_export")
+    geneweb_export = "evt_ind_json.json"
+    output_file = os.path.join(data_export, geneweb_export)
+    with open(output_file, "w") as outfile:
+        outfile.write(json_evt_ind)
+
+    # export du fichier CSV
+    df = pd.read_json(json_evt_ind, convert_dates=False)
+    df.to_csv("data_export/essai.csv")
+
+    """
+    # Declare an empty dataframe to append records
+    dataframe = pandas.DataFrame()
+    record = pandas.json_normalize(json_evt_ind, record_path=['sections','fields'], meta=[['sections','id'],['sections','name'],'_id','id','projectId','silentDocumentWording','name','description','language','created','lastAccessed','lastUpdated','createdBy','lastUpdatedBy'], record_prefix='meta->sections->fields->', meta_prefix='meta->', sep='->', errors='ignore')
+    dataframe = pandas.concat((dataframe, record), axis=1)
+    """
+
+    #print(df)
+
+
+
     # print(list_evt_ind_note)
     # print(list_evt_ind_source)
 
