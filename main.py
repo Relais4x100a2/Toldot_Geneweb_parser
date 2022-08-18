@@ -3,6 +3,7 @@ import uuid
 import simplejson as json
 import pandas as pd
 import os
+import shutil
 
 
 def indexExists(list, index):
@@ -98,20 +99,19 @@ def parse():
                     dict_evt["date"] = None
 
                 # Lieu de l'événment
-                try:
-                    if line[2] == '#p':
-                        adresse = line[3].split("_-_")
-                        if len(adresse) == 1:
-                            lieu = adresse[0].replace("_", " ")
-                            dict_evt["place"] = {"lieu": lieu, "complement": None}
-                        else:
-                            lieu = adresse[1].replace("_", " ")
-                            complement = adresse[0].replace("_", " ")
-                            complement = complement.replace(" [", "")
-                            complement = complement.replace("]", "")
-                            dict_evt["place"] = {"lieu": lieu, "complement": complement}
-                except IndexError:
-                    pass
+                if indexExists(line, 2) is True:
+                    for i in range(0, len(line) - 1):
+                        if line[i] == '#p':
+                            adresse = line[i + 1].split("_-_")
+                            if len(adresse) == 1:
+                                lieu = adresse[0].replace("_", " ")
+                                dict_evt["place"] = {"lieu": lieu, "complement": None}
+                            else:
+                                lieu = adresse[1].replace("_", " ")
+                                complement = adresse[0].replace("_", " ")
+                                complement = complement.replace(" [", "")
+                                complement = complement.replace("]", "")
+                                dict_evt["place"] = {"lieu": lieu, "complement": complement}
 
                 # Les sources de l'événement
                 for s in range(0, len(line) - 1):
@@ -281,20 +281,19 @@ def parse():
                     dict_evt["date"] = None
 
                 # Lieu de l'événment
-                try:
-                    if line[2] == '#p':
-                        adresse = line[3].split("_-_")
-                        if len(adresse) == 1:
-                            lieu = adresse[0].replace("_", " ")
-                            dict_evt["place"] = {"lieu": lieu, "complement": None}
-                        else:
-                            lieu = adresse[1].replace("_", " ")
-                            complement = adresse[0].replace("_", " ")
-                            complement = complement.replace(" [", "")
-                            complement = complement.replace("]", "")
-                            dict_evt["place"] = {"lieu": lieu, "complement": complement}
-                except IndexError:
-                    pass
+                if indexExists(line, 2) is True:
+                    for i in range(0, len(line) - 1):
+                        if line[i] == '#p':
+                            adresse = line[i + 1].split("_-_")
+                            if len(adresse) == 1:
+                                lieu = adresse[0].replace("_", " ")
+                                dict_evt["place"] = {"lieu": lieu, "complement": None}
+                            else:
+                                lieu = adresse[1].replace("_", " ")
+                                complement = adresse[0].replace("_", " ")
+                                complement = complement.replace(" [", "")
+                                complement = complement.replace("]", "")
+                                dict_evt["place"] = {"lieu": lieu, "complement": complement}
 
                 # Les sources de l'événement
                 for s in range(0, len(line) - 1):
@@ -349,27 +348,6 @@ def parse():
 
             list_org.append(dict_organisation)
 
-        # normalisation du JSON
-        json_ind = json.dumps(list_ind, ignore_nan=True, ensure_ascii=False)
-        # json_org = json.dumps(list_org, ignore_nan=True, ensure_ascii=False)
-        # json_evt = json.dumps(list_evt, ignore_nan=True, ensure_ascii=False)
-
-        # export du fichier JSON
-        data_export = os.path.join(os.getcwd(), "uploads")
-        geneweb_export_ind = "json_ind.json"
-        # geneweb_export_org = "json_org.json"
-        # geneweb_export_evt = "json_evt.json"
-
-        output_file_ind = os.path.join(data_export, geneweb_export_ind)
-        # output_file_org = os.path.join(data_export, geneweb_export_org)
-        # output_file_evt = os.path.join(data_export, geneweb_export_evt)
-
-        with open(output_file_ind, "w") as outfile_ind:
-            outfile_ind.write(json_ind)
-        # export du fichier CSV INDIVIDU
-        df = pd.read_json(json_ind, convert_dates=False)
-        output_ind = df.to_csv("uploads/ind.csv")
-    '''
     # normalisation du JSON
     json_ind = json.dumps(list_ind, ignore_nan=True, ensure_ascii=False)
     json_org = json.dumps(list_org, ignore_nan=True, ensure_ascii=False)
@@ -377,32 +355,54 @@ def parse():
 
     # export du fichier JSON
     data_export = os.path.join(os.getcwd(), "data_export")
-    geneweb_export_ind = "json_ind.json"
-    geneweb_export_org = "json_org.json"
-    geneweb_export_evt = "json_evt.json"
+    geneweb_export_ind = "ind.json"
+    geneweb_export_org = "org.json"
+    geneweb_export_evt = "evt.json"
+
+    # création du dossier dans lequel seront enregistrés les fihciers ci-dessus
+    id = uuid.uuid4().hex
+    directory = "toldot_gw_parser_" + id
+    parent_dir = "data_export"
+    data_export = os.path.join(os.getcwd(), parent_dir, directory)
+    os.makedirs(data_export)
 
     output_file_ind = os.path.join(data_export, geneweb_export_ind)
     output_file_org = os.path.join(data_export, geneweb_export_org)
     output_file_evt = os.path.join(data_export, geneweb_export_evt)
 
+    # export du fichier JSON INDIVIDU
     with open(output_file_ind, "w") as outfile:
         outfile.write(json_ind)
     # export du fichier CSV INDIVIDU
     df = pd.read_json(json_ind, convert_dates=False)
-    df.to_csv("data_export/ind.csv")
+    df.to_csv(data_export + "/csv_ind.csv")
 
+    # export du fichier JSON ORGANISATION (famille)
     with open(output_file_org, "w") as outfile:
         outfile.write(json_org)
     # export du fichier CSV ORGANISATION (famille)
     df = pd.read_json(json_org, convert_dates=False)
-    df.to_csv("data_export/org.csv")
+    df.to_csv(data_export + "/csv_org.csv")
 
+    # export du fichier JSON EVENEMENT
     with open(output_file_evt, "w") as outfile:
         outfile.write(json_evt)
     # export du fichier CSV EVENEMENT
     df = pd.read_json(json_evt, convert_dates=False)
-    df.to_csv("data_export/evt.csv")
-    '''
+    df.to_csv(data_export + "/csv_evt.csv")
+
+
+    filename = "toldot_gw_parser_" + id
+    archive_file = os.path.join(os.getcwd(), parent_dir, filename)
+
+    # création de l'archive
+    shutil.make_archive(archive_file, 'zip', data_export)
+
+    # supppresionn des fichiers et du dossier parent
+    shutil.rmtree(data_export)
+
+    # suppression du fichier archive après téléchargement par l'utilisateur
+    os.remove(archive_file+".zip")
 
 
 if __name__ == '__main__':
