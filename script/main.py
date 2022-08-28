@@ -88,7 +88,7 @@ def parse():
                         elif re.search("\|", line[1]):
                             date_ou = line[1].split("|")
                             dict_evt["date"] = {"type": "ou", "value": [date_ou[0], date_ou[1]]}
-                        elif re.search("\.\.", line[1]):
+                        elif re.search("..", line[1]):
                             date_entre = line[1].split("..")
                             dict_evt["date"] = {"type": "entre", "value": [date_entre[0], date_entre[1]]}
                         else:
@@ -270,7 +270,7 @@ def parse():
                         elif re.search("\|", line[1]):
                             date_ou = line[1].split("|")
                             dict_evt["date"] = {"type": "ou", "value": [date_ou[0], date_ou[1]]}
-                        elif re.search("\.\.", line[1]):
+                        elif re.search("..", line[1]):
                             date_entre = line[1].split("..")
                             dict_evt["date"] = {"type": "entre", "value": [date_entre[0], date_entre[1]]}
                         else:

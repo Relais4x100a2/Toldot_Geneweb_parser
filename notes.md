@@ -80,5 +80,18 @@ dict_evt = {
                     #dict_source["cible"] = [{"ind": [dict_individu["id_ind"]], "evt": [dict_evt["id_evt"]]}]
                     dict_source["value_source"] = [line[s + 1]]
                     list_evt_ind_source.append(dict_source)
-```  
-     
+```
+
+```
+@app_web.route('/data_export/archive/<filename>/download')
+def download_file(filename):
+    file_path = os.path.join(os.getcwd(), "data_export", "archive", filename)
+    @after_this_request
+    def remove_file(response):
+        try:
+            os.remove(file_path)
+        except Exception as error:
+            app_web.logger.error("Error removing or closing downloaded file handle", error)
+        return response
+    return send_file(file_path, mimetype='application/zip')
+```

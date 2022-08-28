@@ -18,6 +18,19 @@
 </nav>
 <body>
 <main class="container pb-auto mbl-auto">
+     {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="row">
+                <div class="col">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    {% endwith %}
+
+
     <div>
         <p class="text-justify">Ne perdez plus de temps à recopier les arbres geneanet, utilisez notre parser ! Nous sommes très heureux de vous proposer le premier outil libre de Toldot. Son code est disponible sous licence [A DEFINIR] via <a href="https://github.com/Relais4x100a2/geneweb_parser" target="_blank">le dépôt github</a>. Entièrement gratuit, vous pouvez nous soutenir <a href="https://www.helloasso.com/associations/toldot" target="_blank">en adhérant à l'association Toldot</a>.</p>
     </div>
@@ -51,10 +64,10 @@
                     <label for="formFile" class="form-label">Charger votre fichier au format *.gw</label>
                     <input class="form-control" type="file" name="file" id="formFile">
                 </div>
-
-                <button type="submit" class="btn btn-primary">Parser et télécharger</button>
+                <button type="submit" class="btn btn-primary">Parsez, téléchargez et supprimez vos fichiers sur le serveur</button>
             </form>
             </p>
+
             <h2>Que deviennent vos données ?</h2>
             <p>Vos données sont automatiquement effacées à l'issue de votre requête sur notre serveur.</p>
             <p>A moyen terme, nous envisageons de proposer aux utilisateurs de laisser une copie de leurs données sur
