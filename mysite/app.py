@@ -1,18 +1,18 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, abort, send_from_directory, send_file, \
     jsonify, after_this_request
 import os
-from site_web import parser
+from mysite import parser
 from io import IOBase
 
-app_web = Flask(__name__)
-app_web.config.from_object('config.Config')
+app = Flask(__name__)
+app.config.from_object('config.Config')
 
 
-@app_web.route('/')
+@app.route('/')
 def index():
     return render_template('index.html')
 
-@app_web.route('/', methods=['POST'])
+@app.route('/', methods=['POST'])
 def processus_parser():
     export_parser = parser.parse()
     if export_parser == "Error_1":
@@ -25,7 +25,7 @@ def processus_parser():
     else:
         return send_file(export_parser), os.remove(export_parser)
 
-@app_web.errorhandler(413)
+@app.errorhandler(413)
 def too_large(e):
     flash("Le fichier est trop lourd, ne nous pouvons pas le traiter ! Réessayez avec un fichier plus léger. Aucun "
           "fichier n'a été sauvegardé sur le serveur.", "danger")
@@ -33,4 +33,4 @@ def too_large(e):
 
 
 if __name__ == "__main__":
-    app_web.run(debug=True, port=5001)
+    app.run(debug=True, port=5001)
