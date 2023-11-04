@@ -8,6 +8,7 @@ from flask import send_file, request, abort, flash, redirect, url_for
 from werkzeug.utils import secure_filename
 
 
+
 def parse():
     # création du dossier dans lequel seront enregistrés les fihciers ci-dessus
     id = uuid.uuid4().hex
@@ -110,7 +111,7 @@ def parse():
                 else:
                     dict_evt["date"] = None
 
-                # Lieu de l'événment
+                # Lieu de l'événement
                 if indexExists(line, 2) is True:
                     for i in range(0, len(line) - 1):
                         if line[i] == '#p':

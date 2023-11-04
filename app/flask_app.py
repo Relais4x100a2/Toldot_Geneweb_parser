@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, abort, send_from_directory, send_file, \
     jsonify, after_this_request
 import os
-from mysite import parser
+from app import parser
 from io import IOBase
 
 app = Flask(__name__)

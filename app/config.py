@@ -16,7 +16,7 @@ class Config:
     # Flask settings
     FLASK_APP = environ.get("FLASK_APP")
     FLASK_DEBUG = environ.get("FLASK_DEBUG")
-    FLASK_ENV = environ.get("FLASK_ENV")
+    #FLASK_ENV = environ.get("FLASK_ENV")
     CSRF_ENABLED = True
     SECRET_KEY = environ.get("SECRET_KEY")
     MAX_CONTENT_LENGTH = 10 * 1024 * 1024
