@@ -141,3 +141,28 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
+
+# === Outils et assistants (ne jamais versionner) ===
+.idea/
+.cursor/
+.xxxcursor/
+.claude/
+.agents/
+.ai-team-orchestrator/
+
+# === Données généalogiques réelles : JAMAIS dans Git ===
+*.gw
+*.gwo
+*.gwb/
+*.ged
+*.gedcom
+*.gwplus
+base.txt
+80cayeux82*
+site_web/uploads/
+sitewebasync/
+app/data_export/
+_local_testdata/
+*.log
+.venv/
+venv/
