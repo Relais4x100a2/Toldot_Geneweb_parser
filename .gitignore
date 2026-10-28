@@ -166,3 +166,6 @@ _local_testdata/
 *.log
 .venv/
 venv/
+
+# Sortie de regex.py (noms réels)
+data_regex.csv
