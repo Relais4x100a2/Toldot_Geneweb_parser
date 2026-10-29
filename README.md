@@ -1,3 +1,24 @@
+# ⚠️ Dépôt archivé : remplacé par `geneweb-py`
+
+Ce dépôt (parser regex « V2 », MVP) est **gelé** et n'évolue plus. Ses fonctions ont été
+transférées et modernisées dans le dépôt [`geneweb-py`](https://github.com/Relais4x100a2/geneweb-py),
+moteur central de l'écosystème TOLDOT.
+
+| Ici (V2) | Désormais dans `geneweb-py` |
+|---|---|
+| `app/parser.py`, `regex.py` : extraction regex des `pevt`, familles, dates (`~ ? < > \| ..`), lieux `complément_-_lieu`, sources | `core/parser/` (parser complet, tests de fidélité sur les `pevt`/`#strng`), `core/date.py`, `core/place.py` |
+| Organisations = familles + « organisations » déduites des événements | `core/organization.py` (`Organization`, `OrganizationLink`), `core/event_to_organization.py` (déduction avec hook LLM optionnel), fichier compagnon `*.org.json` |
+| `app/data_export/network.py` : graphe individus / organisations / événements (CSV → NetworkX → Plotly) | `src/geneweb_py/analytics/network.py` (NetworkX, JSON vis.js, GraphML, GEXF, Pyvis ; extra `analytics`) |
+| `app/flask_app.py`, `sitewebasync/` (Flask/Celery) | API REST FastAPI de `geneweb-py` (`api/`) |
+
+Ce qui n'a pas été repris, volontairement : l'export CSV `csv_ind/csv_org/csv_evt`, le schéma
+d'identités `app/data_schema.py` (`authorityRecord`, `othernames`) et le nettoyage `regex.py`
+destiné à une base précise. Ils restent consultables ici comme référence.
+
+Aucune donnée généalogique réelle ne doit être ajoutée à ce dépôt.
+
+---
+
 # Parser de fichier geneweb à des fins prosopographiques
 
 ### version MVP (Minimum Viable Product) 
